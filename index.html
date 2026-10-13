@@ -1,0 +1,810 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Meihua 4 Unit 5 - Belajar Mandarin Interaktif</title>
+    <!-- Mencegah Auto Translate Google -->
+    <meta name="google" content="notranslate">
+    <style>
+        @font-face {
+            font-family: 'SimSunFont';
+            src: local('SimSun'), local('NSimSun'), local('STSong');
+        }
+
+        * {
+            box-sizing: border-box;
+            user-select: none;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+        }
+
+        body {
+            font-family: 'Comic Sans MS', 'Chalkboard SE', 'SimSunFont', sans-serif;
+            background: linear-gradient(135deg, #a1c4fd 0%, #c2e9fb 100%);
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .hanzi-text {
+            font-family: 'SimSunFont', 'SimSun', serif !important;
+        }
+
+        header {
+            background-color: #ff6b6b;
+            color: white;
+            text-align: center;
+            padding: 15px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+            border-bottom: 5px solid #ff4757;
+            position: relative;
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 24px;
+        }
+
+        .admin-btn {
+            position: absolute;
+            right: 15px;
+            top: 15px;
+            background: #2d3436;
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 12px;
+        }
+
+        .user-bar {
+            background: #ffeaa7;
+            padding: 10px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: bold;
+            color: #2d3436;
+            border-bottom: 2px solid #fdcb6e;
+        }
+
+        .nav-tabs {
+            display: flex;
+            background: #74b9ff;
+            overflow-x: auto;
+        }
+
+        .tab-btn {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            background: transparent;
+            color: white;
+            font-weight: bold;
+            font-size: 14px;
+            cursor: pointer;
+            transition: 0.3s;
+            white-space: nowrap;
+        }
+
+        .tab-btn.active {
+            background: #0984e3;
+            border-bottom: 4px solid #00cec9;
+        }
+
+        .container {
+            flex: 1;
+            padding: 20px;
+            max-width: 900px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        .tab-content {
+            display: none;
+            background: white;
+            border-radius: 20px;
+            padding: 25px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+        }
+
+        .tab-content.active {
+            display: block;
+            animation: fadeIn 0.4s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Flashcard Grid */
+        .flashcard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
+            gap: 15px;
+        }
+
+        .card {
+            height: 180px;
+            perspective: 1000px;
+            cursor: pointer;
+        }
+
+        .card-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            text-align: center;
+            transition: transform 0.6s;
+            transform-style: preserve-3d;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            border-radius: 15px;
+        }
+
+        .card.flipped .card-inner {
+            transform: rotateY(180deg);
+        }
+
+        .card-front, .card-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            border-radius: 15px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 10px;
+        }
+
+        .card-front {
+            background: #fab1a0;
+            color: #2d3436;
+            border: 3px solid #e17055;
+        }
+
+        .card-back {
+            background: #81ecec;
+            color: #2d3436;
+            transform: rotateY(180deg);
+            border: 3px solid #00cec9;
+        }
+
+        .hanzi {
+            font-size: 28px;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .pinyin {
+            font-size: 15px;
+            color: #0984e3;
+            margin-bottom: 5px;
+        }
+
+        .meaning {
+            font-size: 13px;
+            color: #2d3436;
+        }
+
+        .audio-btn {
+            background: #fdcb6e;
+            border: none;
+            border-radius: 50%;
+            width: 32px;
+            height: 32px;
+            cursor: pointer;
+            margin-top: 5px;
+        }
+
+        /* Options */
+        .option-btn {
+            display: block;
+            width: 100%;
+            padding: 12px;
+            margin: 8px 0;
+            background: #f1f2f6;
+            border: 2px solid #dfe4ea;
+            border-radius: 12px;
+            font-size: 18px;
+            cursor: pointer;
+            text-align: left;
+            transition: 0.2s;
+        }
+
+        .option-btn:hover {
+            background: #eccc68;
+        }
+
+        /* Reading Box */
+        .reading-box {
+            background: #f1f9ff;
+            border: 2px dashed #74b9ff;
+            padding: 15px;
+            border-radius: 12px;
+            max-height: 250px;
+            overflow-y: auto;
+            margin-bottom: 20px;
+            line-height: 1.8;
+            font-size: 16px;
+        }
+
+        /* Match Game Grid */
+        .match-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        .match-card {
+            padding: 15px;
+            background: #dfe6e9;
+            border-radius: 10px;
+            text-align: center;
+            font-size: 18px;
+            cursor: pointer;
+            border: 3px solid #b2bec3;
+        }
+
+        .match-card.selected {
+            border-color: #fdcb6e;
+            background: #ffeaa7;
+        }
+
+        .match-card.matched {
+            background: #55efc4;
+            border-color: #00b894;
+            visibility: hidden;
+        }
+
+        footer {
+            background: #2d3436;
+            color: white;
+            text-align: center;
+            padding: 10px;
+            font-size: 12px;
+            margin-top: auto;
+        }
+
+        /* Modals */
+        .input-modal {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.6);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 999;
+        }
+
+        .modal-card {
+            background: white;
+            padding: 25px;
+            border-radius: 20px;
+            text-align: center;
+            width: 90%;
+            max-width: 500px;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        .modal-card input {
+            width: 100%;
+            padding: 10px;
+            margin: 15px 0;
+            border: 2px solid #74b9ff;
+            border-radius: 8px;
+            font-size: 16px;
+        }
+
+        .modal-card button {
+            background: #ff6b6b;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+            font-size: 13px;
+        }
+
+        table, th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #74b9ff;
+            color: white;
+        }
+    </style>
+</head>
+<body oncontextmenu="return false;">
+
+    <!-- Player Modal -->
+    <div id="playerModal" class="input-modal">
+        <div class="modal-card">
+            <h2>Selamat Datang! 🎓</h2>
+            <p>Masukkan Nama Siswa:</p>
+            <input type="text" id="playerNameInput" placeholder="Nama Lengkap..." autofocus>
+            <button onclick="startGame()">Mulai Belajar</button>
+        </div>
+    </div>
+
+    <!-- Admin Panel Modal -->
+    <div id="adminModal" class="input-modal" style="display: none;">
+        <div class="modal-card">
+            <h2>👑 Dashboard Admin / Guru</h2>
+            <p>Pantau Progres Real-Time Siswa:</p>
+            <button onclick="fetchAdminLogs()" style="background:#0984e3; margin-bottom:10px;">🔄 Muat Ulang Data</button>
+            <div id="adminLogsContainer">Memuat data...</div>
+            <br>
+            <button onclick="closeAdminPanel()" style="background:#6c5ce7;">Tutup</button>
+        </div>
+    </div>
+
+    <header>
+        <h1>Meihua 4 Unit 5: 桌子上的蛋糕少了一块</h1>
+        <button class="admin-btn" onclick="openAdminPanel()">🔒 Admin</button>
+    </header>
+
+    <div class="user-bar">
+        <div>👤 Siswa: <span id="displayName">-</span></div>
+        <div>⭐ Score Total: <span id="totalScore">100</span>%</div>
+    </div>
+
+    <div class="nav-tabs">
+        <button class="tab-btn active" onclick="switchTab('flashcard')">🃏 Flashcards (41)</button>
+        <button class="tab-btn" onclick="switchTab('quiz1')">❓ Kuis Hanzi (41)</button>
+        <button class="tab-btn" onclick="switchTab('quiz2')">🧩 Menjodohkan</button>
+        <button class="tab-btn" onclick="switchTab('quiz3')">✏️ Lengkapi Kalimat</button>
+        <button class="tab-btn" onclick="switchTab('quiz4')">📖 Teks Bacaan</button>
+    </div>
+
+    <div class="container">
+        <!-- TAB 1: FLASHCARDS (41 KOSAKATA) -->
+        <div id="flashcard" class="tab-content active">
+            <h3>Kartu Kosakata Lengkap (41 Kata)</h3>
+            <p style="font-size: 13px; color: #666;">*Membuka/membalik kartu baru akan mengurangi skor awal 1 poin.</p>
+            <div class="flashcard-grid" id="flashcardContainer"></div>
+        </div>
+
+        <!-- TAB 2: KUIS TEBAK HANZI (41 KOSAKATA) -->
+        <div id="quiz1" class="tab-content">
+            <h3>Kuis Tebak Hanzi Lengkap (41 Soal)</h3>
+            <div id="q1Container"></div>
+        </div>
+
+        <!-- TAB 3: MENJODOHKAN -->
+        <div id="quiz2" class="tab-content">
+            <h3>Kuis Menjodohkan (Hanzi & Pinyin)</h3>
+            <p>Klik 1 kata Hanzi dan 1 kata Pinyin/Arti yang cocok!</p>
+            <div class="match-grid" id="matchContainer"></div>
+        </div>
+
+        <!-- TAB 4: LENGKAPI KALIMAT -->
+        <div id="quiz3" class="tab-content">
+            <h3>Melengkapi Kalimat (Level YCT2)</h3>
+            <div id="q3Container"></div>
+        </div>
+
+        <!-- TAB 5: BACAAN -->
+        <div id="quiz4" class="tab-content">
+            <h3>Teks Bacaan & Pertanyaan Pemahaman</h3>
+            <div class="reading-box hanzi-text">
+                <p><b>桌子上的蛋糕少了一块</b></p>
+                <p>今天我的同学安妮来我家。妈妈买了六块蛋糕，她把蛋糕放在厨房里的桌子上。要吃蛋糕的时候，妈妈对我说：“桌子上的蛋糕少了一块。”</p>
+                <p>谁拿了桌子上的蛋糕呢？桌子上有一根黑色的头发，这根头发不长也不短。这是不是拿蛋糕的人的头发呢？</p>
+                <p>因为妈妈的头发是棕色的，所以这不是妈妈的头发。因为哥哥的头发很短，所以这也不是哥哥的头发。因为姐姐的头发很长，所以这不是姐姐的头发。因为我的头发也很长，所以这也不是我的头发。安妮没走到厨房里，所以这也不是安妮的头发。妹妹的头发不长也不短，她的头发也是黑色的。这一定是妹妹的头发。</p>
+                <p>我问妹妹：“你是不是拿了桌子上的蛋糕？” 妹妹对我说：“是，因为我饿了，所以我把桌子上的一块蛋糕吃了。” 原来是妹妹拿了桌子上的蛋糕。</p>
+            </div>
+            <div id="q4Container"></div>
+        </div>
+    </div>
+
+    <footer>
+        by lcnpalembang-08994477998
+    </footer>
+
+    <audio id="bgm" loop>
+        <source src="https://actions.google.com/sounds/v1/ambiences/playful_cat.ogg" type="audio/ogg">
+    </audio>
+
+    <script>
+        // MASUKKAN WEB APP URL DARI GOOGLE APPS SCRIPT DI SINI:
+        const GOOGLE_SHEET_WEBAPP_URL = "TEMPEL_URL_WEB_APP_DI_SINI";
+
+        // SELURUH 41 KOSAKATA DARI FILE KOSAKATA.TXT
+        const fullVocabList = [
+            { hanzi: "同学", pinyin: "tóngxué", meaning: "teman sekolah" },
+            { hanzi: "块", pinyin: "kuài", meaning: "(kata penggolong)" },
+            { hanzi: "蛋糕", pinyin: "dàngāo", meaning: "kue bolu; tart" },
+            { hanzi: "放", pinyin: "fàng", meaning: "meletakkan" },
+            { hanzi: "时候", pinyin: "shíhou", meaning: "waktu" },
+            { hanzi: "对", pinyin: "duì", meaning: "terhadap" },
+            { hanzi: "少", pinyin: "shǎo", meaning: "sedikit; kurang" },
+            { hanzi: "拿", pinyin: "ná", meaning: "mengambil" },
+            { hanzi: "根", pinyin: "gēn", meaning: "(kata penggolong)" },
+            { hanzi: "所以", pinyin: "suǒyǐ", meaning: "oleh karena itu; maka" },
+            { hanzi: "一定", pinyin: "yídìng", meaning: "pasti" },
+            { hanzi: "走", pinyin: "zǒu", meaning: "berjalan" },
+            { hanzi: "到", pinyin: "dào", meaning: "ke; sampai; tiba" },
+            { hanzi: "T恤", pinyin: "T-xù", meaning: "kaos" },
+            { hanzi: "情况", pinyin: "qíngkuàng", meaning: "situasi; keadaan" },
+            { hanzi: "黑 / 黑色", pinyin: "hēi / hēisè", meaning: "hitam / warna hitam" },
+            { hanzi: "棕色", pinyin: "zōngsè", meaning: "warna cokelat" },
+            { hanzi: "红 / 红色", pinyin: "hóng / hóngsè", meaning: "merah / warna merah" },
+            { hanzi: "长", pinyin: "cháng", meaning: "panjang" },
+            { hanzi: "短", pinyin: "duǎn", meaning: "pendek" },
+            { hanzi: "头发", pinyin: "tóufa", meaning: "rambut" },
+            { hanzi: "来", pinyin: "lái", meaning: "datang" },
+            { hanzi: "吃", pinyin: "chī", meaning: "makan" },
+            { hanzi: "要", pinyin: "yào", meaning: "mau; hendak; ingin" },
+            { hanzi: "说", pinyin: "shuō", meaning: "berkata; berbicara" },
+            { hanzi: "问", pinyin: "wèn", meaning: "bertanya" },
+            { hanzi: "饿", pinyin: "è", meaning: "lapar" },
+            { hanzi: "饱", pinyin: "bǎo", meaning: "kenyang" },
+            { hanzi: "穿", pinyin: "chuān", meaning: "memakai / mengenakan" },
+            { hanzi: "看见", pinyin: "kànjiàn", meaning: "melihat" },
+            { hanzi: "告诉", pinyin: "gàosu", meaning: "memberi tahu" },
+            { hanzi: "生病", pinyin: "shēngbìng", meaning: "sakit" },
+            { hanzi: "厨房", pinyin: "chúfáng", meaning: "dapur" },
+            { hanzi: "桌子", pinyin: "zhuōzi", meaning: "meja" },
+            { hanzi: "椅子", pinyin: "yǐzi", meaning: "kursi" },
+            { hanzi: "衣服", pinyin: "yīfu", meaning: "pakaian" },
+            { hanzi: "新", pinyin: "xīn", meaning: "baru" },
+            { hanzi: "电影院", pinyin: "diànyǐngyuàn", meaning: "bioskop" },
+            { hanzi: "电影", pinyin: "diànyǐng", meaning: "film" },
+            { hanzi: "妈妈", pinyin: "māmā", meaning: "ibu" },
+            { hanzi: "哥哥", pinyin: "gēge", meaning: "kakak laki-laki" }
+        ];
+
+        // Soal Kuis 3: Melengkapi Kalimat YCT2
+        const fillQuestions = [
+            { q: "今天我的___来我家玩。(Teman sekolah)", options: ["同学", "医生", "老师"], ans: "同学" },
+            { q: "妈妈买了一___蛋糕。(Kata penggolong)", options: ["块", "个", "只"], ans: "块" },
+            { q: "请把书本___在桌子上。(Meletakkan)", options: ["放", "吃", "听"], ans: "放" },
+            { q: "吃晚饭的___，爸爸回家了。(Waktu)", options: ["时候", "昨天", "明天"], ans: "时候" },
+            { q: "桌子上的苹果___了一个。(Kurang)", options: ["少", "多", "大"], ans: "少" },
+            { q: "因为我很饿，___我想吃饭。(Maka)", options: ["所以", "但是", "因为"], ans: "所以" },
+            { q: "这本书___是妹妹的。(Pasti)", options: ["一定", "不", "很"], ans: "一定" },
+            { q: "妹妹___进厨房吃蛋糕。(Berjalan)", options: ["走", "看", "买"], ans: "走" },
+            { q: "哥哥___拿了我的铅笔？(Siapa)", options: ["谁", "什么", "哪儿"], ans: "谁" },
+            { q: "妈妈___我说：“新衣服真漂亮！”(Terhadap/Kepada)", options: ["对", "在", "和"], ans: "对" }
+        ];
+
+        // Soal Kuis 4: Bacaan Teks
+        const readingQuestions = [
+            { q: "1. 谁今天来到“我”家？", options: ["A. 哥哥", "B. 安妮", "C. 老师"], ans: "B. 安妮" },
+            { q: "2. 妈妈一共买了多少块蛋糕？", options: ["A. 5块", "B. 6块", "C. 7块"], ans: "B. 6块" },
+            { q: "3. 妈妈把蛋糕放在哪里？", options: ["A. 房间里的桌子上", "B. 厨房里的桌子上", "C. 椅子上"], ans: "B. 厨房里的桌子上" },
+            { q: "4. 桌子上留下了什么线索？", options: ["A. 一根黑色的头发", "B. 一根棕色的头发", "C. 一条衣服"], ans: "A. 一根黑色的头发" },
+            { q: "5. 为什么这肯定不是妈妈的头发？", options: ["A. 因为妈妈头发很短", "B. 因为妈妈头发是棕色的", "C. 因为妈妈没有头发"], ans: "B. 因为妈妈头发是棕色的" },
+            { q: "6. 哥哥的头发是怎么样的？", options: ["A. 很长", "B. 很短", "C. 不长也不短"], ans: "B. 很短" },
+            { q: "7. 安妮有没有走到厨房里？", options: ["A. 有走到厨房", "B. 没走到厨房", "C. 不知道"], ans: "B. 没走到厨房" },
+            { q: "8. 谁的头发“不长也不短，也是黑色的”？", options: ["A. 姐姐", "B. 妹妹", "C. 安妮"], ans: "B. 妹妹" },
+            { q: "9. 妹妹为什么要吃蛋糕？", options: ["A. 因为她渴了", "B. 因为她饿了", "C. 因为她想玩"], ans: "B. 因为她饿了" },
+            { q: "10. 最后是谁拿了桌子上的蛋糕？", options: ["A. 妹妹", "B. 哥哥", "C. 安妮"], ans: "A. 妹妹" }
+        ];
+
+        let playerName = "";
+        let currentScore = 100;
+        let flippedCards = new Set();
+        let currentTab = "flashcard";
+
+        function startGame() {
+            const nameInput = document.getElementById('playerNameInput').value.trim();
+            if (!nameInput) {
+                alert("Silakan masukkan nama siswa terlebih dahulu!");
+                return;
+            }
+            playerName = nameInput;
+            document.getElementById('displayName').innerText = playerName;
+            document.getElementById('playerModal').style.display = 'none';
+
+            const bgm = document.getElementById('bgm');
+            bgm.volume = 0.15;
+            bgm.play().catch(e => console.log("Autoplay blocked"));
+
+            initFlashcards();
+            initQuiz1();
+            initQuiz2();
+            initQuiz3();
+            initQuiz4();
+
+            sendProgressToGoogleSheet("Mulai Pengerjaan");
+        }
+
+        function shuffle(array) {
+            return array.sort(() => Math.random() - 0.5);
+        }
+
+        // Init Flashcards untuk SEMUA 41 kata
+        function initFlashcards() {
+            const container = document.getElementById('flashcardContainer');
+            container.innerHTML = "";
+            let shuffled = shuffle([...fullVocabList]);
+            
+            shuffled.forEach((item, idx) => {
+                const card = document.createElement('div');
+                card.className = 'card';
+                card.innerHTML = `
+                    <div class="card-inner">
+                        <div class="card-front">
+                            <div class="hanzi hanzi-text">${item.hanzi}</div>
+                            <small>Klik untuk balik</small>
+                        </div>
+                        <div class="card-back">
+                            <div class="hanzi hanzi-text">${item.hanzi}</div>
+                            <div class="pinyin">${item.pinyin}</div>
+                            <div class="meaning">${item.meaning}</div>
+                            <button class="audio-btn" onclick="event.stopPropagation(); playTTS('${item.hanzi}')">🔊</button>
+                        </div>
+                    </div>
+                `;
+                card.onclick = () => {
+                    card.classList.toggle('flipped');
+                    if (!flippedCards.has(item.hanzi)) {
+                        flippedCards.add(item.hanzi);
+                        currentScore = Math.max(0, currentScore - 1);
+                        updateScoreDisplay();
+                    }
+                };
+                container.appendChild(card);
+            });
+        }
+
+        function playTTS(text) {
+            if ('speechSynthesis' in window) {
+                const cleanText = text.split('/')[0].trim();
+                const msg = new SpeechSynthesisUtterance(cleanText);
+                msg.lang = 'zh-CN';
+                msg.rate = 0.8;
+                window.speechSynthesis.speak(msg);
+            }
+        }
+
+        // Init Kuis Tebak Hanzi untuk SEMUA 41 kata
+        function initQuiz1() {
+            const container = document.getElementById('q1Container');
+            container.innerHTML = "";
+            let shuffled = shuffle([...fullVocabList]);
+
+            shuffled.forEach((item, index) => {
+                // Pilih 3 pilihan salah dari daftar kosakata asli
+                let distractors = fullVocabList.filter(x => x.hanzi !== item.hanzi);
+                let randomDistractors = shuffle(distractors).slice(0, 3).map(x => x.hanzi);
+                let options = shuffle([item.hanzi, ...randomDistractors]);
+
+                let qDiv = document.createElement('div');
+                qDiv.style.marginBottom = "20px";
+                qDiv.innerHTML = `<p><b>Soal ${index+1}:</b> Pilih Hanzi yang tepat untuk pinyin <b>${item.pinyin}</b> (${item.meaning})</p>`;
+                
+                options.forEach(opt => {
+                    let btn = document.createElement('button');
+                    btn.className = "option-btn hanzi-text";
+                    btn.innerText = opt;
+                    btn.onclick = () => {
+                        if(opt === item.hanzi) {
+                            btn.style.background = "#55efc4";
+                        } else {
+                            btn.style.background = "#ff7675";
+                            currentScore = Math.max(0, currentScore - 1);
+                            updateScoreDisplay();
+                        }
+                    };
+                    qDiv.appendChild(btn);
+                });
+                container.appendChild(qDiv);
+            });
+        }
+
+        // Quiz 2: Menjodohkan
+        let selectedMatch = null;
+        function initQuiz2() {
+            const container = document.getElementById('matchContainer');
+            container.innerHTML = "";
+            let subset = shuffle([...fullVocabList]).slice(0, 5);
+            
+            let hanziList = shuffle(subset.map(x => ({ text: x.hanzi, id: x.hanzi, type: 'hanzi' })));
+            let pinyinList = shuffle(subset.map(x => ({ text: `${x.pinyin} (${x.meaning})`, id: x.hanzi, type: 'pinyin' })));
+
+            let allItems = [...hanziList, ...pinyinList];
+
+            allItems.forEach(item => {
+                let mCard = document.createElement('div');
+                mCard.className = `match-card ${item.type === 'hanzi' ? 'hanzi-text' : ''}`;
+                mCard.innerText = item.text;
+                mCard.onclick = () => {
+                    if (mCard.classList.contains('matched')) return;
+
+                    if (!selectedMatch) {
+                        selectedMatch = { item, card: mCard };
+                        mCard.classList.add('selected');
+                    } else {
+                        if (selectedMatch.item.type !== item.type && selectedMatch.item.id === item.id) {
+                            mCard.classList.add('matched');
+                            selectedMatch.card.classList.add('matched');
+                            selectedMatch = null;
+                        } else {
+                            selectedMatch.card.classList.remove('selected');
+                            selectedMatch = null;
+                            currentScore = Math.max(0, currentScore - 2);
+                            updateScoreDisplay();
+                        }
+                    }
+                };
+                container.appendChild(mCard);
+            });
+        }
+
+        // Quiz 3: Melengkapi Kalimat
+        function initQuiz3() {
+            const container = document.getElementById('q3Container');
+            container.innerHTML = "";
+            let shuffled = shuffle([...fillQuestions]);
+
+            shuffled.forEach((q, idx) => {
+                let qDiv = document.createElement('div');
+                qDiv.style.marginBottom = "15px";
+                qDiv.innerHTML = `<p><b>${idx+1}.</b> ${q.q}</p>`;
+
+                q.options.forEach(opt => {
+                    let btn = document.createElement('button');
+                    btn.className = "option-btn hanzi-text";
+                    btn.innerText = opt;
+                    btn.onclick = () => {
+                        if (opt === q.ans) {
+                            btn.style.background = "#55efc4";
+                        } else {
+                            btn.style.background = "#ff7675";
+                            currentScore = Math.max(0, currentScore - 3);
+                            updateScoreDisplay();
+                        }
+                    };
+                    qDiv.appendChild(btn);
+                });
+                container.appendChild(qDiv);
+            });
+        }
+
+        // Quiz 4: Bacaan
+        function initQuiz4() {
+            const container = document.getElementById('q4Container');
+            container.innerHTML = "";
+            let shuffled = shuffle([...readingQuestions]);
+
+            shuffled.forEach((q, idx) => {
+                let qDiv = document.createElement('div');
+                qDiv.style.marginBottom = "20px";
+                qDiv.innerHTML = `<p><b>${idx+1}. ${q.q}</b></p>`;
+
+                q.options.forEach(opt => {
+                    let btn = document.createElement('button');
+                    btn.className = "option-btn hanzi-text";
+                    btn.innerText = opt;
+                    btn.onclick = () => {
+                        if (opt === q.ans) {
+                            btn.style.background = "#55efc4";
+                        } else {
+                            btn.style.background = "#ff7675";
+                            currentScore = Math.max(0, currentScore - 3);
+                            updateScoreDisplay();
+                        }
+                    };
+                    qDiv.appendChild(btn);
+                });
+                container.appendChild(qDiv);
+            });
+        }
+
+        function updateScoreDisplay() {
+            document.getElementById('totalScore').innerText = currentScore;
+            sendProgressToGoogleSheet(`Score Update: ${currentScore}%`);
+        }
+
+        function switchTab(tabId) {
+            currentTab = tabId;
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
+            
+            document.getElementById(tabId).classList.add('active');
+            event.target.classList.add('active');
+
+            sendProgressToGoogleSheet(`Membuka Tab ${tabId}`);
+        }
+
+        // Pengiriman Data Ke Google Spreadsheet
+        function sendProgressToGoogleSheet(actionDetails) {
+            if (!playerName || !GOOGLE_SHEET_WEBAPP_URL || GOOGLE_SHEET_WEBAPP_URL.includes("TEMPEL_URL")) return;
+
+            const payload = {
+                timestamp: new Date().toLocaleString("id-ID"),
+                playerName: playerName,
+                score: currentScore,
+                activeTab: currentTab,
+                action: actionDetails
+            };
+
+            fetch(GOOGLE_SHEET_WEBAPP_URL, {
+                method: "POST",
+                mode: "no-cors",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(payload)
+            }).catch(err => console.log("Google Sheet Error:", err));
+        }
+
+        // Admin Panel Features
+        function openAdminPanel() {
+            const pwd = prompt("Masukkan Kata Sandi Admin:");
+            if (pwd === "admin123") {
+                document.getElementById('adminModal').style.display = 'flex';
+                fetchAdminLogs();
+            } else {
+                alert("Kata sandi salah!");
+            }
+        }
+
+        function closeAdminPanel() {
+            document.getElementById('adminModal').style.display = 'none';
+        }
+
+        function fetchAdminLogs() {
+            const container = document.getElementById('adminLogsContainer');
+            if (!GOOGLE_SHEET_WEBAPP_URL || GOOGLE_SHEET_WEBAPP_URL.includes("TEMPEL_URL")) {
+                container.innerHTML = "<p style='color:red;'>URL Google Apps Script belum dipasang di dalam kode Javascript.</p>";
+                return;
+            }
+
+            container.innerHTML = "Memuat data dari Google Sheets...";
+            fetch(GOOGLE_SHEET_WEBAPP_URL)
+                .then(res => res.json())
+                .then(data => {
+                    if (!data || data.length === 0) {
+                        container.innerHTML = "<p>Belum ada data pengerjaan.</p>";
+                        return;
+                    }
+
+                    let tableHTML = "<table><thead><tr>";
+                    data[0].forEach(col => tableHTML += `<th>${col}</th>`);
+                    tableHTML += "</tr></thead><tbody>";
+
+                    for (let i = 1; i < data.length; i++) {
+                        tableHTML += "<tr>";
+                        data[i].forEach(cell => tableHTML += `<td>${cell}</td>`);
+                        tableHTML += "</tr>";
+                    }
+                    tableHTML += "</tbody></table>";
+                    container.innerHTML = tableHTML;
+                })
+                .catch(err => {
+                    container.innerHTML = "<p style='color:red;'>Gagal mengambil data real-time.</p>";
+                });
+        }
+
+        window.onblur = function() {
+            sendProgressToGoogleSheet("Peringatan: Pindah Tab / Unfocus!");
+        };
+
+        document.addEventListener('keydown', function(e) {
+            if (e.ctrlKey && (e.key === 'c' || e.key === 'v' || e.key === 'u' || e.key === 'a' || e.key === 's')) {
+                e.preventDefault();
+            }
+        });
+    </script>
+</body>
+</html>
